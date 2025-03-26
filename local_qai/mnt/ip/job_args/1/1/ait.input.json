@@ -8,7 +8,7 @@
   "MethodParams": [
     {
       "Name": "target_image_attributes",
-      "Value": "scene,weather"
+      "Value": "weather,scene,timeofday"
     }
   ],
   "testbed_mount_volume_path": "/usr/local/qai/mnt",

@@ -4,8 +4,8 @@
         "Version": "1.0"
     },
     "ExecuteInfo": {
-        "StartDateTime": "2025-03-26T16:05:17+0900",
-        "EndDateTime": "2025-03-26T16:05:19+0900",
+        "StartDateTime": "2025-03-26T17:09:24+0900",
+        "EndDateTime": "2025-03-26T17:09:27+0900",
         "MachineInfo": {
             "cpu_brand": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
             "cpu_arch": "X86_64",
@@ -18,7 +18,7 @@
         "Measures": [
             {
                 "Name": "set_difference_combinatorial_coverage",
-                "Value": "0.15151515151515152"
+                "Value": "0.13157894736842105"
             }
         ],
         "Resources": [

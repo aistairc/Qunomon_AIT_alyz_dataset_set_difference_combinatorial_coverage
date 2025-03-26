@@ -33,7 +33,7 @@
 # 
 # * new cerarion
 
-# In[1]:
+# In[ ]:
 
 
 #########################################
@@ -207,7 +207,7 @@ if not is_ait_launch:
     input_generator = AITInputGenerator(manifest_path)
     input_generator.add_ait_inventories(name='label_dataset',
                                         value='data/bdd100K_train_test_coco.json')
-    input_generator.set_ait_params("target_image_attributes", "scene")
+    input_generator.set_ait_params("target_image_attributes", "scene,weather")
     
     input_generator.write()
 
@@ -255,6 +255,13 @@ def calculate_combinations(label_data,target_attributes_list):
     """
     訓練データのラベルデータにある画像レベルの属性と画像内のオブジェクトの属性の組み合わせを測定する関数。
     テストデータのラベルデータにも同様に組み合わせを測定する。
+    parameter:
+        label_data:coco形式のラベルデータ
+        target_attributes_list：指定された画像レベルの属性のリスト
+    return:
+        train_combinations:訓練データで観測された属性の組み合わせ
+        test_combinations:テストデータで観測された属性の組み合わせ
+        all_combinations:訓練データまたはテストデータで観測された属性の組み合わせ
     """
     #訓練データとテストデータに分割
     train_data={img["id"]:img for img in label_data["images"] if img["split"]=="train"}
@@ -307,12 +314,16 @@ def calculate_combinations(label_data,target_attributes_list):
 # In[12]:
 
 
-# measurement functions. They consume inference results.
 @log(logger)
 @measures(ait_output, 'set_difference_combinatorial_coverage')
 def calculate_sdcc(train_combinations,test_combinations):
     """
     訓練データで観測された属性の組み合わせとテストデータで観測された属性の組み合わせからSDCCを計算する関数
+    parameters:
+        train_combinations:訓練データで観測された属性の組み合わせ
+        test_combinations:テストデータで観測された属性の組み合わせ
+    return:
+        sdcc_value:訓練データで観測された属性の組み合わせのうち、テストデータに存在しない割合
     """
     if len(train_combinations)>0:
         sdcc_value = len(train_combinations - test_combinations)/len(train_combinations)
@@ -330,8 +341,12 @@ def calculate_sdcc(train_combinations,test_combinations):
 def output_csv(train_combinations, test_combinations, all_combinations,target_attributes_list,file_path: str=None):
     """
     訓練データとテストデータで観測された属性の組み合わせをまとめた表を出力する関数。
-    
-    """
+    parameters:
+       train_combinations:訓練データで観測された属性の組み合わせ
+        test_combinations:テストデータで観測された属性の組み合わせ
+        all_combinations:訓練データまたはテストデータで観測された属性の組み合わせ        
+        target_attributes_list：指定された画像レベルの属性のリスト
+     """
     csv_data=[]
     for comb in sorted(all_combinations):
         #指定された属性が複数のときの処理
@@ -384,17 +399,19 @@ def move_log(file_path: str=None) -> str:
 @log(logger)
 @ait_main(ait_output, path_helper, is_ait_launch)
 def main() -> None:
-    # load dataset
-    label_path = ait_input.get_inventory_path('label_dataset')
+    #指定された属性の読み込み
     target_attributes = ait_input.get_method_param_value('target_image_attributes')
-    
+    target_attributes_list = [attr.strip() for attr in target_attributes.strip().split(",")]
+    #データセットの読み込み
+    label_path = ait_input.get_inventory_path('label_dataset')
     with open(label_path,"r") as lf:
         label_data=json.load(lf)
-    target_attributes_list = [attr.strip() for attr in target_attributes.strip().split(",")]
+    #属性の組み合わせを計算し、取得する
     train_combinations, test_combinations, all_combinations = calculate_combinations(label_data, target_attributes_list)
-
+    #SDCCの計算と表示
     sdcc_value = calculate_sdcc(train_combinations,test_combinations)
     print(f"Set Difference Combinatorial Coverage Value:{sdcc_value}")
+    #訓練データとテストデータで観測された属性の組み合わせをまとめた表を表示
     csv_data=output_csv(train_combinations, test_combinations, all_combinations,target_attributes_list)    
     move_log()
 
