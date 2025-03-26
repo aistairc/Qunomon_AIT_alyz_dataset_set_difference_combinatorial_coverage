@@ -1,0 +1,63 @@
+{
+  "name": "alyz_dataset_set_difference_combinatorial_coverage",
+  "description": "画像内のオブジェクトの属性（カテゴリ）と、画像レベルの属性（例：天候や時間帯）の組み合わせに基づいて、訓練データとテストデータ間のSDCC(Set Difference Combinatorial Coverage)を測定する。データセット間のカバレッジの差異や偏りを把握することができる。\\n \\begin{math}SDCC_{t}(D_{train,t},D_{test,t})=\\frac{|D_{train,t} \\verb|\\| D_{test,t}|}{|D_{train,t}|}\\end{math} \\n\\begin{math}D_{train,t}\\end{math}:訓練データで観測されたt-wayの属性の組み合わせ\\n\\begin{math}D_{test,t}\\end{math}:テストデータで観測されたt-wayの属性の組み合わせ\\n\\begin{math}|D_{train,t} \\verb|\\| D_{test,t}|\\end{math}:訓練データには存在するが、テストデータには存在しないt-wayの属性の組み合わせ",
+  "source_repository": "https://github.com/aistairc/Qunomon_AIT_alyz_dataset_set_difference_combinatorial_coverage",
+  "version": "1.0",
+  "quality": "https://ait-hub.pj.aist.go.jp/ait-hub/api/0.0.1/qualityDimensions/機械学習品質マネジメントガイドライン第三版/B-1データセットの被覆性",
+  "keywords": [
+    "h5",
+    "dataset",
+    "object detect",
+    "Automatic Operation",
+    "combinatorial coverage"
+  ],
+  "references": [],
+  "licenses": [
+    "Apache License Version 2.0"
+  ],
+  "inventories": [
+    {
+      "name": "label_dataset",
+      "type": "dataset",
+      "description": "COCO形式の訓練データとテストデータのラベルデータ。imagesフィールドには、各画像のメタ情報（画像レベルの属性。例：weather,timeofday,sceneなど）を記載し、annotationフィールドには物体ごとの情報（オブジェクトレベルの属性。例:catogory_id.bboxなど）を記載する。またimagesフィールドに各画像が訓練データかテストデータ化を識別するため、splitフィールド（trainまたはtest）を追加する。COCO形式のフォーマットはこちらを参考にしてください：https://qiita.com/kHz/items/8c06d0cb620f268f4b3e",
+      "requirement": {
+        "format": [
+          "json"
+        ]
+      }
+    }
+  ],
+  "parameters": [
+    {
+      "name": "target_image_attributes",
+      "type": "str",
+      "description": "t-wayの組み合わせの計算に使用する、各画像に付随する画像レベルの属性名を指定。指定した属性をもとにデータ間の違いを分析する。指定した属性が1つの場合は2-wayの組み合わせを使用し、指定した属性が複数の場合は3-wayの組み合わせを使用する。入力例：weather、timeofday,scene",
+      "default_val": "attributeA,attributeB"
+    }
+  ],
+  "report": {
+    "measures": [
+      {
+        "name": "set_difference_combinatorial_coverage",
+        "type": "float",
+        "description": "訓練データで観測された属性の組み合わせのうち、テストデータに存在しない割合。値が高いほどテストデータと訓練データの属性の組み合わせが異なる。",
+        "structure": "single",
+        "min": "0",
+        "max": "1"
+      }
+    ],
+    "resources": [
+      {
+        "name": "Train_Test_Attribute_Combinations_Table",
+        "type": "table",
+        "description": "訓練データとテストデータで観測された属性の組み合わせをまとめた表"
+      }
+    ]
+  },
+  "downloads": [
+    {
+      "name": "Log",
+      "description": "AIT実行ログ"
+    }
+  ]
+}
