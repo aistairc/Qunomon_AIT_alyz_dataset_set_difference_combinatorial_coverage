@@ -3329,7 +3329,7 @@ THE SOFTWARE.
 
 
 rpds-py
-0.23.1
+0.24.0
 MIT
 Copyright (c) 2023 Julian Berman
 
