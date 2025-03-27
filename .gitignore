@@ -1,1 +1,5 @@
 /tool/docker/jupyter/resolve-dependencies.sh
+/local_qai/mnt/ip/job_args/1/1/.ipynb_checkpoints
+/local_qai/mnt/ip/job_result/1/1/.ipynb_checkpoints
+/develop/ait.manifest.json
+/local_qai/mnt
