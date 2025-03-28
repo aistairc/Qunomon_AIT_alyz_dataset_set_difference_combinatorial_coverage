@@ -33,7 +33,7 @@
 # 
 # * new cerarion
 
-# In[ ]:
+# In[1]:
 
 
 #########################################
@@ -106,7 +106,7 @@ if not is_ait_launch:
     get_ipython().system('pip install -r $requirements_path ')
 
 
-# In[ ]:
+# In[6]:
 
 
 #########################################
@@ -123,7 +123,7 @@ from itertools import combinations
 import pandas as pd
 
 
-# In[ ]:
+# In[7]:
 
 
 #########################################
@@ -142,7 +142,7 @@ from ait_sdk.develop.annotation import measures, resources, downloads, ait_main 
 # must use modules
 
 
-# In[ ]:
+# In[8]:
 
 
 #########################################
@@ -156,7 +156,7 @@ if not is_ait_launch:
     manifest_genenerator.set_ait_name('alyz_dataset_set_difference_combinatorial_coverage')
     manifest_genenerator.set_ait_description('画像内のオブジェクトの属性（カテゴリ）と、画像ラベルの属性（例：天候や時間帯）の組み合わせに基づいて、訓練データとテストデータ間のSDCC(Set Difference Combinatorial Coverage)を測定する。データセット間のカバレッジの差異や偏りを把握することができる。\\n \\begin{math}SDCC_{t}(D_{train,t},D_{test,t})=\\frac{|D_{train,t} \\verb|\\| D_{test,t}|}{|D_{train,t}|}\\end{math} \\n\\begin{math}D_{train,t}\\end{math}:訓練データで観測されたt-wayの属性の組み合わせ\\n\\begin{math}D_{test,t}\\end{math}:テストデータで観測されたt-wayの属性の組み合わせ\\n\\begin{math}|D_{train,t} \\verb|\\| D_{test,t}|\\end{math}:訓練データには存在するが、テストデータには存在しないt-wayの属性の組み合わせ')
     manifest_genenerator.set_ait_source_repository('https://github.com/aistairc/Qunomon_AIT_alyz_dataset_set_difference_combinatorial_coverage')
-    manifest_genenerator.set_ait_version('1.0')
+    manifest_genenerator.set_ait_version('1.1')
     manifest_genenerator.add_ait_keywords('h5')
     manifest_genenerator.add_ait_keywords('dataset')
     manifest_genenerator.add_ait_keywords('object detect')
@@ -195,7 +195,7 @@ if not is_ait_launch:
     manifest_path = manifest_genenerator.write()
 
 
-# In[ ]:
+# In[9]:
 
 
 #########################################
@@ -212,7 +212,7 @@ if not is_ait_launch:
     input_generator.write()
 
 
-# In[ ]:
+# In[10]:
 
 
 #########################################
@@ -243,7 +243,7 @@ ait_manifest.read_json(path_helper.get_manifest_file_path())
 ### do not edit cell
 
 
-# In[ ]:
+# In[11]:
 
 
 #########################################
@@ -311,7 +311,7 @@ def calculate_combinations(label_data,target_attributes_list):
     return train_combinations, test_combinations, all_combinations
 
 
-# In[ ]:
+# In[12]:
 
 
 @log(logger)
@@ -333,7 +333,7 @@ def calculate_sdcc(train_combinations,test_combinations):
     return sdcc_value
 
 
-# In[ ]:
+# In[13]:
 
 
 @log(logger)
@@ -352,12 +352,12 @@ def output_csv(train_combinations, test_combinations, all_combinations,target_at
         #指定された属性が複数のときの処理
         if len(target_attributes_list)>=2:
             category, attr_name1, attr_value1, attr_name2, attr_value2 =comb
-            #訓練データで観測された場合は〇、観測されていない場合は空欄
-            train_flag ="〇" if comb in train_combinations else ""
-            #テストデータで観測された場合は〇、観測されていない場合は空欄
-            test_flag ="〇" if comb in test_combinations else ""
-            #属性名をkey、属性の値(初期値は空欄)をvalueとする辞書の作成
-            all_attribute_values = {attr:"" for attr in target_attributes_list}
+            #訓練データで観測された場合は〇、観測されていない場合は全角スペース
+            train_flag ="〇" if comb in train_combinations else "　"
+            #テストデータで観測された場合は〇、観測されていない場合は全角スペース
+            test_flag ="〇" if comb in test_combinations else "　"
+            #属性名をkey、属性の値(初期値は全角スペース)をvalueとする辞書の作成
+            all_attribute_values = {attr:"　" for attr in target_attributes_list}
             #属性の値を更新
             all_attribute_values[attr_name1] = attr_value1
             all_attribute_values[attr_name2] = attr_value2
@@ -366,10 +366,10 @@ def output_csv(train_combinations, test_combinations, all_combinations,target_at
         #指定された属性が１つのときの処理
         else:
             category, attr_name1, attr_value1 =comb
-            #訓練データで観測された場合は〇、観測されていない場合は空欄
-            train_flag ="〇" if comb in train_combinations else ""
-            #テストデータで観測された場合は〇、観測されていない場合は空欄
-            test_flag ="〇" if comb in test_combinations else ""
+            #訓練データで観測された場合は〇、観測されていない場合は全角スペース
+            train_flag ="〇" if comb in train_combinations else "　"
+            #テストデータで観測された場合は〇、観測されていない場合は全角スペース
+            test_flag ="〇" if comb in test_combinations else "　"
             #カテゴリ名、属性の値、訓練データで観測されているかどうかの判定、テストデータで観測されているかどうかの判定を保存
             csv_data.append([category, attr_value1, train_flag, test_flag])
     columns =["category"]+target_attributes_list+["Train","Test"]
@@ -379,7 +379,7 @@ def output_csv(train_combinations, test_combinations, all_combinations,target_at
     return file_path
 
 
-# In[ ]:
+# In[14]:
 
 
 @log(logger)
@@ -388,7 +388,7 @@ def move_log(file_path: str=None) -> str:
     shutil.move(get_log_path(), file_path)
 
 
-# In[ ]:
+# In[15]:
 
 
 #########################################
@@ -416,7 +416,7 @@ def main() -> None:
     move_log()
 
 
-# In[ ]:
+# In[16]:
 
 
 #########################################
@@ -427,7 +427,7 @@ if __name__ == '__main__':
     main()
 
 
-# In[ ]:
+# In[17]:
 
 
 #########################################
@@ -438,7 +438,7 @@ ait_owner='AIST'
 ait_creation_year='2025'
 
 
-# In[ ]:
+# In[18]:
 
 
 #########################################
