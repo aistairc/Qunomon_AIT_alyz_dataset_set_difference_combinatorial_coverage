@@ -2,7 +2,7 @@
   "name": "alyz_dataset_set_difference_combinatorial_coverage",
   "description": "画像内のオブジェクトの属性（カテゴリ）と、画像ラベルの属性（例：天候や時間帯）の組み合わせに基づいて、訓練データとテストデータ間のSDCC(Set Difference Combinatorial Coverage)を測定する。データセット間のカバレッジの差異や偏りを把握することができる。\\n \\begin{align}SDCC_{t}(D_{train,t},D_{test,t})=\\frac{|D_{train,t} \\verb|\\| D_{test,t}|}{|D_{train,t}|}\\end{align} \\n\\begin{align}D_{train,t}\\end{align}:訓練データで観測されたt-wayの属性の組み合わせ\\n\\begin{align}D_{test,t}\\end{align}:テストデータで観測されたt-wayの属性の組み合わせ\\n\\begin{align}|D_{train,t} \\verb|\\| D_{test,t}|\\end{align}:訓練データには存在するが、テストデータには存在しないt-wayの属性の組み合わせ",
   "source_repository": "https://github.com/aistairc/Qunomon_AIT_alyz_dataset_set_difference_combinatorial_coverage",
-  "version": "1.1",
+  "version": "1.2",
   "quality": "https://ait-hub.pj.aist.go.jp/ait-hub/api/0.0.1/qualityDimensions/機械学習品質マネジメントガイドライン第三版/B-1データセットの被覆性",
   "keywords": [
     "h5",
